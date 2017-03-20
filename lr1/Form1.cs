@@ -36,15 +36,21 @@ namespace lr1
             _limitationsCount = (int) xCount.Value;
             _limitationsArray = new TCT[_limitationsCount];
             int hm = 86;
+            int wm = 100; 
 
             for (int i = 0; i < _limitationsCount; i++)
             {
-                TCT tmp = new TCT(hm, i.ToString());
+                TCT tmp = new TCT(hm, i.ToString(),_limitationsCount);
                 tmp.PasteControl(limitationsGB);
                 hm += 30;
+                wm += 42;
                 if (limitationsGB.Height < hm + 10)
                 {
                     limitationsGB.Height += 30;
+                }
+                if (limitationsGB.Width < wm)
+                {
+                    limitationsGB.Width += 42;
                 }
                 _limitationsArray[i] = tmp;
             }

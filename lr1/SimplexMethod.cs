@@ -16,23 +16,30 @@ namespace SimplexMethod
     //класс для создания, добавления на форму и забора занчений с формы
     public class TCT
     {
-        public TextBox t1;
+        //public TextBox t1;
+        public TextBox[] _xInputArr;
         public TextBox t2;
         public ComboBox c;
         public TCT()
         {
-            this.t1 = null;
+            //this.t1 = null;
+            this._xInputArr = null;
             this.t2 = null;
             this.c = null;
         }
         //создание контролов
-        public TCT(int h, string pref)
+        public TCT(int h, string pref, int xCountArg)
         {
-            this.t1 = new TextBox();
-            this.t1.Name = "textbox_tmp" + pref;
-            this.t1.Width = 156;
-            this.t1.Height = 32;
-            this.t1.Location = new Point(10, h);
+            _xInputArr = new TextBox[xCountArg];
+            int step = 42;
+            for (int i = 0; i < xCountArg; i++)
+            {
+                this._xInputArr[i] = new TextBox();
+                this._xInputArr[i].Name = "textbox_tmp" + pref;
+                this._xInputArr[i].Width = 32;
+                this._xInputArr[i].Height = 32;
+                this._xInputArr[i].Location = new Point(10+i*step, h);
+            }
             this.c = new ComboBox();
             this.c.Name = "combox_tmp" + pref;
             this.c.Items.Add(">=");
@@ -50,7 +57,10 @@ namespace SimplexMethod
         //вставка контролов на групбокс
         public void PasteControl(GroupBox gb)
         {
-            gb.Controls.Add(this.t1);
+            for(int i=0;i<_xInputArr.Length;i++)
+            {
+                gb.Controls.Add(this._xInputArr[i]);
+            }
             gb.Controls.Add(this.c);
             gb.Controls.Add(this.t2);
         }
