@@ -20,7 +20,7 @@ namespace lr1
         }
         
 
-        private int _x_count;
+        private int _variablesCount;
         private int _limitationsCount;
         private TCT[] _limitationsArray; //Масив контролів з обмеженнями.
 
@@ -33,25 +33,25 @@ namespace lr1
 
         private void button2_Click(object sender, EventArgs e)
         {
-            _limitationsCount = (int) xCount.Value;
+            limitationsCount.Enabled = false;
+            xCount.Enabled = false;
+            _limitationsCount = (int) limitationsCount.Value;
+            _variablesCount = (int) xCount.Value;
             _limitationsArray = new TCT[_limitationsCount];
             int hm = 86;
             int wm = 100; 
 
             for (int i = 0; i < _limitationsCount; i++)
             {
-                TCT tmp = new TCT(hm, i.ToString(),_limitationsCount);
+                TCT tmp = new TCT(hm, i.ToString(),_variablesCount, limitationsGB);
                 tmp.PasteControl(limitationsGB);
                 hm += 30;
-                wm += 42;
+                //wm += 42;
                 if (limitationsGB.Height < hm + 10)
                 {
                     limitationsGB.Height += 30;
                 }
-                if (limitationsGB.Width < wm)
-                {
-                    limitationsGB.Width += 42;
-                }
+              
                 _limitationsArray[i] = tmp;
             }
         }
@@ -59,6 +59,16 @@ namespace lr1
         private void Form1_Load(object sender, EventArgs e)
         {
             
+        }
+
+        private void xCount_ValueChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+           
         }
     }
 }

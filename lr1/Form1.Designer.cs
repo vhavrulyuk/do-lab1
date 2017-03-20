@@ -33,12 +33,12 @@
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.xCount = new System.Windows.Forms.NumericUpDown();
-            this.numericUpDown2 = new System.Windows.Forms.NumericUpDown();
+            this.limitationsCount = new System.Windows.Forms.NumericUpDown();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.limitationsGB = new System.Windows.Forms.GroupBox();
             this.label3 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.xCount)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.limitationsCount)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.limitationsGB.SuspendLayout();
             this.SuspendLayout();
@@ -83,6 +83,11 @@
             // xCount
             // 
             this.xCount.Location = new System.Drawing.Point(185, 14);
+            this.xCount.Maximum = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
             this.xCount.Minimum = new decimal(new int[] {
             2,
             0,
@@ -96,19 +101,25 @@
             0,
             0,
             0});
+            this.xCount.ValueChanged += new System.EventHandler(this.xCount_ValueChanged);
             // 
-            // numericUpDown2
+            // limitationsCount
             // 
-            this.numericUpDown2.Location = new System.Drawing.Point(185, 36);
-            this.numericUpDown2.Minimum = new decimal(new int[] {
+            this.limitationsCount.Location = new System.Drawing.Point(185, 36);
+            this.limitationsCount.Maximum = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.limitationsCount.Minimum = new decimal(new int[] {
             2,
             0,
             0,
             0});
-            this.numericUpDown2.Name = "numericUpDown2";
-            this.numericUpDown2.Size = new System.Drawing.Size(66, 20);
-            this.numericUpDown2.TabIndex = 5;
-            this.numericUpDown2.Value = new decimal(new int[] {
+            this.limitationsCount.Name = "limitationsCount";
+            this.limitationsCount.Size = new System.Drawing.Size(66, 20);
+            this.limitationsCount.TabIndex = 5;
+            this.limitationsCount.Value = new decimal(new int[] {
             2,
             0,
             0,
@@ -117,7 +128,7 @@
             // groupBox1
             // 
             this.groupBox1.Controls.Add(this.label1);
-            this.groupBox1.Controls.Add(this.numericUpDown2);
+            this.groupBox1.Controls.Add(this.limitationsCount);
             this.groupBox1.Controls.Add(this.button2);
             this.groupBox1.Controls.Add(this.xCount);
             this.groupBox1.Controls.Add(this.label2);
@@ -160,7 +171,7 @@
             this.Text = "Form1";
             this.Load += new System.EventHandler(this.Form1_Load);
             ((System.ComponentModel.ISupportInitialize)(this.xCount)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.limitationsCount)).EndInit();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.limitationsGB.ResumeLayout(false);
@@ -176,10 +187,10 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.NumericUpDown xCount;
-        private System.Windows.Forms.NumericUpDown numericUpDown2;
+        private System.Windows.Forms.NumericUpDown limitationsCount;
         private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.GroupBox limitationsGB;
         private System.Windows.Forms.Label label3;
+        public System.Windows.Forms.GroupBox limitationsGB;
     }
 }
 
