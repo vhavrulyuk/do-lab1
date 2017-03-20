@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using SimplexMethod;
 
 namespace lr1
 {
@@ -15,6 +17,42 @@ namespace lr1
         public Form1()
         {
             InitializeComponent();
+        }
+        
+
+        private int _x_count;
+        private int _limitationsCount;
+        private TCT[] _limitationsArray; //Масив контролів з обмеженнями.
+
+
+
+        private void groupBox1_Enter(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            _limitationsCount = (int) xCount.Value;
+            _limitationsArray = new TCT[_limitationsCount];
+            int hm = 86;
+
+            for (int i = 0; i < _limitationsCount; i++)
+            {
+                TCT tmp = new TCT(hm, i.ToString());
+                tmp.PasteControl(limitationsGB);
+                hm += 30;
+                if (limitationsGB.Height < hm + 10)
+                {
+                    limitationsGB.Height += 30;
+                }
+                _limitationsArray[i] = tmp;
+            }
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            
         }
     }
 }
