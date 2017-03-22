@@ -33,12 +33,12 @@
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.xCount = new System.Windows.Forms.NumericUpDown();
-            this.limitationsCount = new System.Windows.Forms.NumericUpDown();
+            this.lCount = new System.Windows.Forms.NumericUpDown();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.limitationsGB = new System.Windows.Forms.GroupBox();
             this.label3 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.xCount)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.limitationsCount)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.lCount)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.limitationsGB.SuspendLayout();
             this.SuspendLayout();
@@ -103,23 +103,23 @@
             0});
             this.xCount.ValueChanged += new System.EventHandler(this.xCount_ValueChanged);
             // 
-            // limitationsCount
+            // lCount
             // 
-            this.limitationsCount.Location = new System.Drawing.Point(185, 36);
-            this.limitationsCount.Maximum = new decimal(new int[] {
+            this.lCount.Location = new System.Drawing.Point(185, 36);
+            this.lCount.Maximum = new decimal(new int[] {
             10,
             0,
             0,
             0});
-            this.limitationsCount.Minimum = new decimal(new int[] {
+            this.lCount.Minimum = new decimal(new int[] {
             2,
             0,
             0,
             0});
-            this.limitationsCount.Name = "limitationsCount";
-            this.limitationsCount.Size = new System.Drawing.Size(66, 20);
-            this.limitationsCount.TabIndex = 5;
-            this.limitationsCount.Value = new decimal(new int[] {
+            this.lCount.Name = "lCount";
+            this.lCount.Size = new System.Drawing.Size(66, 20);
+            this.lCount.TabIndex = 5;
+            this.lCount.Value = new decimal(new int[] {
             2,
             0,
             0,
@@ -128,7 +128,7 @@
             // groupBox1
             // 
             this.groupBox1.Controls.Add(this.label1);
-            this.groupBox1.Controls.Add(this.limitationsCount);
+            this.groupBox1.Controls.Add(this.lCount);
             this.groupBox1.Controls.Add(this.button2);
             this.groupBox1.Controls.Add(this.xCount);
             this.groupBox1.Controls.Add(this.label2);
@@ -145,7 +145,7 @@
             this.limitationsGB.Controls.Add(this.label3);
             this.limitationsGB.Location = new System.Drawing.Point(278, 12);
             this.limitationsGB.Name = "limitationsGB";
-            this.limitationsGB.Size = new System.Drawing.Size(285, 217);
+            this.limitationsGB.Size = new System.Drawing.Size(489, 399);
             this.limitationsGB.TabIndex = 7;
             this.limitationsGB.TabStop = false;
             this.limitationsGB.Text = "Обмеження";
@@ -163,7 +163,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(575, 263);
+            this.ClientSize = new System.Drawing.Size(798, 432);
             this.Controls.Add(this.limitationsGB);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.button1);
@@ -171,7 +171,7 @@
             this.Text = "Form1";
             this.Load += new System.EventHandler(this.Form1_Load);
             ((System.ComponentModel.ISupportInitialize)(this.xCount)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.limitationsCount)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.lCount)).EndInit();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.limitationsGB.ResumeLayout(false);
@@ -187,7 +187,7 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.NumericUpDown xCount;
-        private System.Windows.Forms.NumericUpDown limitationsCount;
+        private System.Windows.Forms.NumericUpDown lCount;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.Label label3;
         public System.Windows.Forms.GroupBox limitationsGB;

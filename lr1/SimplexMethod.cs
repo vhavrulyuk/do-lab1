@@ -6,74 +6,87 @@ using System.Windows.Forms.VisualStyles;
 using lr1;
 
 
-namespace SimplexMethod
+namespace SimplexMethodNS
 {
     public class SimplexMethod
     {
         public SimplexMethod()
         {
         }
-    }
 
-
-    //класс для создания, добавления на форму и забора занчений с формы
-    public class TCT
-    {
-        //public TextBox t1;
-        public TextBox[] _xInputArr;
-        public TextBox t2;
-        public ComboBox c;
-        public TCT()
+        public static void addInterfaceElements(int limCount, int xCount, GroupBox limitationsGB)
         {
-            //this.t1 = null;
-            this._xInputArr = null;
-            this.t2 = null;
-            this.c = null;
+            addMainVarInputs(limCount, xCount, limitationsGB);
+            addGoalFuncInputs(xCount,limitationsGB);
         }
-        //создание контролов
-        public TCT(int h, string pref, int xCountArg,GroupBox lGBox)
+
+        private static void addMainVarInputs(int limCount, int xCount, GroupBox limitationsGB)
         {
-            _xInputArr = new TextBox[xCountArg];
-            int step = 42;
-            int i;
-            int wm = 100;
-            for (i = 0; i < xCountArg; i++)
+            Label mainVarLabel = new Label();
+            mainVarLabel.Text = "Основні змінні";
+            mainVarLabel.Location = new Point(10,75);
+            limitationsGB.Controls.Add(mainVarLabel);
+            TextBox[,] data = new TextBox[limCount, xCount];
+            int x = 50;
+            int y = 50;
+            int xOffset = 50;
+            int yOffset = 50;
+            int j=0;
+            for (int i = 0; i < limCount; i++)
             {
-                this._xInputArr[i] = new TextBox();
-                this._xInputArr[i].Name = "textbox_tmp" + pref;
-                this._xInputArr[i].Width = 32;
-                this._xInputArr[i].Height = 32;
-                this._xInputArr[i].Location = new Point(10+i*step, h);
-                wm += 42;
-                if (lGBox.Width < wm)
+
+                for (j = 0; j < xCount; j++)
                 {
-                    lGBox.Width += 60;
+                    data[i, j] = new TextBox();
+                    data[i, j].Name = "textbox_input_coef_" + i.ToString() + "_" + j.ToString();
+                    data[i, j].Width = 40;
+                    data[i, j].Height = 32;
+                    data[i, j].Location = new Point(j * xOffset + 10, i * yOffset + 100);
+                    limitationsGB.Controls.Add(data[i, j]);
                 }
-                
             }
-            this.c = new ComboBox();
-            this.c.Name = "combox_tmp" + pref;
-            this.c.Items.Add(">=");
-            this.c.Items.Add("=");
-            this.c.Items.Add("=<");
-            this.c.Width = 40;
-            this.c.Height = 32;
-            this.c.Location = new Point(_xInputArr[i-1].Location.X + 42, h);
-            this.t2 = new TextBox();
-            this.t2.Name = "textbox_tmp_z" + pref;
-            this.t2.Width = 40;
-            this.t2.Height = 32;
-            this.t2.Location = new Point(_xInputArr[i-1].Location.X + 92, h);
+            addFreeMembersInputs(limCount, limitationsGB, (j*xOffset + 30));
+
+
         }
-        //вставка контролов на групбокс
-        public void PasteControl(GroupBox gb)
+
+        private static void addGoalFuncInputs(int xCount, GroupBox limitationsGB)
         {
-            for(int i=0;i<_xInputArr.Length;i++)
+            TextBox[] goal = new TextBox[xCount];
+            int x = 20;
+            int y = 50;
+            int xOffset = 50;
+            int i;
+            for (i = 0; i < xCount; i++)
             {
-                gb.Controls.Add(this._xInputArr[i]);
+                goal[i] = new TextBox();
+                goal[i].Name = "textbox_input_goal_" + i.ToString();
+                goal[i].Width = 40;
+                goal[i].Height = 32;
+                goal[i].Location = new Point(i * xOffset + 10, y);
+                limitationsGB.Controls.Add(goal[i]);
             }
-            gb.Controls.Add(this.c);
-            gb.Controls.Add(this.t2);
+            Label goaLabel = new Label();
+            goaLabel.Text = "-> MAX";
+            goaLabel.Location = new Point(i * xOffset+10,y);
+            limitationsGB.Controls.Add(goaLabel);
         }
+        private static void addFreeMembersInputs(int limCount, GroupBox limitationsGB, int startXPos)
+        {
+            TextBox[] freeMembers = new TextBox[limCount];
+            int y = 50;
+            int yOffset = 50;
+            int i;
+            for (i = 0; i < limCount; i++)
+            {
+                freeMembers[i] = new TextBox();
+                freeMembers[i].Name = "textbox_input_goal_" + i.ToString();
+                freeMembers[i].Width = 40;
+                freeMembers[i].Height = 32;
+                freeMembers[i].Location = new Point(startXPos, i * yOffset + 100);
+                limitationsGB.Controls.Add(freeMembers[i]);
+            }
+        }
+
     }
 }
