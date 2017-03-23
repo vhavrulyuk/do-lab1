@@ -19,7 +19,7 @@ namespace lr1
             InitializeComponent();
         }
 
-        
+        private int limitationsCount, variablesCount;
 
         private void groupBox1_Enter(object sender, EventArgs e)
         {
@@ -29,12 +29,9 @@ namespace lr1
         {
             lCount.Enabled = false;
             xCount.Enabled = false;
-            var limitationsCount = (int) lCount.Value;
-            var variablesCount = (int) xCount.Value;
+            limitationsCount = (int) lCount.Value;
+            variablesCount = (int) xCount.Value;
             SimplexMethod.addInterfaceElements(limitationsCount, variablesCount, limitationsGB);
-
-
-
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -47,6 +44,19 @@ namespace lr1
 
         private void button3_Click(object sender, EventArgs e)
         {  
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button3_Click_1(object sender, EventArgs e)
+        {
+            //TO DO read values of limitationCoeficents
+            int[,] tempMainArr = SimplexMethod.getValuesOfLimitationCoeficients();
+            int[,] tempAddArr = SimplexMethod.formAdditionalVarsArray(limitationsCount);
+            int[,] AwithStartingBasicSoulutionLook = SimplexMethod.formMatrixOfLimitationCoefcients(tempMainArr,tempAddArr);
         }
     }
 }
