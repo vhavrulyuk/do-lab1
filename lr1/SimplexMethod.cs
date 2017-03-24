@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Diagnostics.Eventing.Reader;
 using System.Drawing;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Security.Authentication.ExtendedProtection;
 using System.Windows.Forms;
 using System.Windows.Forms.VisualStyles;
 using lr1;
@@ -16,6 +18,7 @@ namespace SimplexMethodNS
         }
 
         private static TextBox[,] data;
+        private static TextBox[] freeMembers;
 
         public static void addInterfaceElements(int limCount, int xCount, GroupBox limitationsGB)
         {
@@ -30,9 +33,10 @@ namespace SimplexMethodNS
             mainVarLabel.Location = new Point(10,75);
             limitationsGB.Controls.Add(mainVarLabel);
             data = new TextBox[limCount, xCount];
+            Label[,] labels = new Label[limCount,xCount];
             int x = 50;
             int y = 50;
-            int xOffset = 50;
+            int xOffset = 70;
             int yOffset = 50;
             int j=0;
             for (int i = 0; i < limCount; i++)
@@ -44,7 +48,14 @@ namespace SimplexMethodNS
                     data[i, j].Width = 40;
                     data[i, j].Height = 32;
                     data[i, j].Location = new Point(j * xOffset + 10, i * yOffset + 100);
+                    labels[i, j] = new Label();
+                    labels[i, j].Width = 20;
+                    labels[i, j].Height = 32;
+                    labels[i, j].Text = "X" + (i+1).ToString();
+                    //labels[i,j].ForeColor = Color.Black;
+                    labels[i,j].Location = new Point(data[i, j].Location.X+45, data[i, j].Location.Y);
                     limitationsGB.Controls.Add(data[i, j]);
+                    limitationsGB.Controls.Add(labels[i, j]);
                 }
             }
             addFreeMembersInputs(limCount, limitationsGB, (j*xOffset + 30));
@@ -73,7 +84,8 @@ namespace SimplexMethodNS
         }
         private static void addFreeMembersInputs(int limCount, GroupBox limitationsGB, int startXPos)
         {
-            TextBox[] freeMembers = new TextBox[limCount];
+            freeMembers = new TextBox[limCount];
+            Label[] equalityLabels = new Label[limCount];
             int y = 50;
             int yOffset = 50;
             int i;
@@ -84,7 +96,14 @@ namespace SimplexMethodNS
                 freeMembers[i].Width = 40;
                 freeMembers[i].Height = 32;
                 freeMembers[i].Location = new Point(startXPos, i * yOffset + 100);
+                equalityLabels[i] = new Label();
+                equalityLabels[i].Width = 20;
+                equalityLabels[i].Height = 32;
+                equalityLabels[i].Text = "<=";
+                //labels[i,j].ForeColor = Color.Black;
+                equalityLabels[i].Location = new Point(freeMembers[i].Location.X -25, freeMembers[i].Location.Y);
                 limitationsGB.Controls.Add(freeMembers[i]);
+                limitationsGB.Controls.Add(equalityLabels[i]);
             }
         }
 
@@ -103,31 +122,31 @@ namespace SimplexMethodNS
             return additionalVars;
         }
 
-        public static int[,] formMatrixOfLimitationCoefcients(int[,] mainV, int[,] additionalV)
+        public static int[,] formMatrixOfCoefcients(int[,] mainV, int[,] additionalV)
         {
             int mainVRows = mainV.GetLength(0);
             int mainVCols = mainV.GetLength(1);
             int additionalRCols = additionalV.GetLength(1);
             
-            int[,] limitationCoeficients = new int[mainVRows, mainVCols + additionalRCols];
+            int[,] coeficientsMatrix = new int[mainVRows, mainVCols + additionalRCols];
             for (int i=0;i < mainVRows; i++)
                 for (int j = 0; j < mainVCols; j++)
                 {
-                    limitationCoeficients[i, j] = mainV[i, j];
+                    coeficientsMatrix[i, j] = mainV[i, j];
                 }
             for (int i = 0; i < mainVRows; i++)
-                for (int j=mainVCols; j < limitationCoeficients.GetLength(1); j++)
+                for (int j=mainVCols; j < coeficientsMatrix.GetLength(1); j++)
                 {
-                    limitationCoeficients[i, j] = additionalV[i, j- mainVCols];
+                    coeficientsMatrix[i, j] = additionalV[i, j- mainVCols];
                 }
             for (int i = 0; i < mainVRows; i++)
             {
-                for (int j = 0; j < limitationCoeficients.GetLength(1); j++)
+                for (int j = 0; j < coeficientsMatrix.GetLength(1); j++)
                 {
-                    Console.WriteLine("limitationCoeficients[" + i + "," + j + "]= " + limitationCoeficients[i, j]);
+                    Console.WriteLine("CoeficientsMatrix[" + i + "," + j + "]= " + coeficientsMatrix[i, j]);
                 }
             }
-            return limitationCoeficients;
+            return coeficientsMatrix;
         }
 
         public static int[,] getValuesOfLimitationCoeficients()
@@ -139,6 +158,35 @@ namespace SimplexMethodNS
                 for (int j = 0; j < data.GetLength(1); j++)
                     Int32.TryParse(data[i,j].Text, out limitationCoeficients[i, j]);
             return limitationCoeficients;
+        }
+        public static int[] getFreeMembersValues()
+        {
+            int[] freeMemebersValues = new int[freeMembers.Length];
+            for (int i = 0; i < freeMembers.Length; i++)
+                Int32.TryParse(freeMembers[i].Text, out freeMemebersValues[i]);
+            return freeMemebersValues;
+        }
+
+
+        public static void printExtendedSystemToFile(int[,] coeficients, int[] freeMembers)
+        {
+            // Compose a string that consists of three lines.
+            string lines = "Розширена система рівнянь: \r\n";
+            for (int i = 0; i < coeficients.GetLength(0); i++)
+            {
+                for (int j = 0; j < coeficients.GetLength(1); j++)
+                {
+                    lines += coeficients[i, j].ToString() + "X" + (j + 1).ToString();
+                    if (j<coeficients.GetLength(1)-1)lines += "+";
+                }
+                lines += "=";
+                lines += freeMembers[i].ToString() + "\r\n";
+            }
+
+            // Write the string to a file.
+            System.IO.StreamWriter file = new System.IO.StreamWriter("d:\\solution.txt", true);
+            file.WriteLine(lines);
+            file.Close();
         }
     }
 }

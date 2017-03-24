@@ -56,7 +56,9 @@ namespace lr1
             //TO DO read values of limitationCoeficents
             int[,] tempMainArr = SimplexMethod.getValuesOfLimitationCoeficients();
             int[,] tempAddArr = SimplexMethod.formAdditionalVarsArray(limitationsCount);
-            int[,] AwithStartingBasicSoulutionLook = SimplexMethod.formMatrixOfLimitationCoefcients(tempMainArr,tempAddArr);
+            int[,] AwithStartingBasicSoulutionLook = SimplexMethod.formMatrixOfCoefcients(tempMainArr,tempAddArr);
+            int[] freeMembersValues = SimplexMethod.getFreeMembersValues();
+            SimplexMethod.printExtendedSystemToFile(AwithStartingBasicSoulutionLook,freeMembersValues);
         }
     }
 }
