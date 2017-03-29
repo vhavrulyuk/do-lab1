@@ -48,17 +48,43 @@ namespace lr1
 
         private void button1_Click(object sender, EventArgs e)
         {
+            double[,] table =
+            {
+                {40, 2, 1},
+                {65, 3, 2},
+                {80, 4, 2},
+                {0, -25, -15}
+            };
+            double[] result = new double[2];
+            double[,] table_result;
+            SimplexMethod S = new SimplexMethod(table);
+            table_result = S.Calculate(result);
 
+            Console.WriteLine();
+            Console.WriteLine("Рішення: ");
+            Console.WriteLine("X[1] = " + result[0]);
+            Console.WriteLine("X[2] = " + result[1]);
+            Console.ReadLine();
         }
 
         private void button3_Click_1(object sender, EventArgs e)
         {
-            //TO DO read values of limitationCoeficents
+            
+
+
+
+
+            
+              //TO DO read values of limitationCoeficents
             int[,] tempMainArr = SimplexMethod.getValuesOfLimitationCoeficients();
             int[,] tempAddArr = SimplexMethod.formAdditionalVarsArray(limitationsCount);
+            //int[] basis = 
             int[,] AwithStartingBasicSoulutionLook = SimplexMethod.formMatrixOfCoefcients(tempMainArr,tempAddArr);
             int[] freeMembersValues = SimplexMethod.getFreeMembersValues();
             SimplexMethod.printExtendedSystemToFile(AwithStartingBasicSoulutionLook,freeMembersValues);
-        }
+            SimplexMethod.printCoeficientsMatrix(AwithStartingBasicSoulutionLook);
+            string[] basisArray = SimplexMethod.formBasis(AwithStartingBasicSoulutionLook);
+            SimplexMethod.printSimplexTable(basisArray);
+            }
     }
 }
