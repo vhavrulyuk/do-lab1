@@ -1,6 +1,7 @@
 D:\ЛП\Програмна інженерія\3курс\2 семестр\ДО\ЛР\лр1\project\lr1\lr1\bin\Debug\lr1.exe.config
 D:\ЛП\Програмна інженерія\3курс\2 семестр\ДО\ЛР\лр1\project\lr1\lr1\bin\Debug\lr1.exe
 D:\ЛП\Програмна інженерія\3курс\2 семестр\ДО\ЛР\лр1\project\lr1\lr1\bin\Debug\lr1.pdb
+D:\ЛП\Програмна інженерія\3курс\2 семестр\ДО\ЛР\лр1\project\lr1\lr1\obj\Debug\lr1.csprojResolveAssemblyReference.cache
 D:\ЛП\Програмна інженерія\3курс\2 семестр\ДО\ЛР\лр1\project\lr1\lr1\obj\Debug\lr1.Form1.resources
 D:\ЛП\Програмна інженерія\3курс\2 семестр\ДО\ЛР\лр1\project\lr1\lr1\obj\Debug\lr1.Properties.Resources.resources
 D:\ЛП\Програмна інженерія\3курс\2 семестр\ДО\ЛР\лр1\project\lr1\lr1\obj\Debug\lr1.csproj.GenerateResource.Cache
