@@ -1,12 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Diagnostics;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using SimplexMethodNS;
 
@@ -19,7 +12,10 @@ namespace lr1
             InitializeComponent();
         }
 
-        private int limitationsCount, variablesCount;
+        private int _limitationsCount, _variablesCount;
+        private double[] _freeMembersValues;
+        private double[,] _tempMainArr;
+        private double[] _goalCoeficientsArray;
 
         private void groupBox1_Enter(object sender, EventArgs e)
         {
@@ -29,9 +25,9 @@ namespace lr1
         {
             lCount.Enabled = false;
             xCount.Enabled = false;
-            limitationsCount = (int) lCount.Value;
-            variablesCount = (int) xCount.Value;
-            SimplexMethod.addInterfaceElements(limitationsCount, variablesCount, limitationsGB);
+            _limitationsCount = (int) lCount.Value;
+            _variablesCount = (int) xCount.Value;
+            SimplexMethod.AddInterfaceElements(_limitationsCount, _variablesCount, limitationsGB);
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -40,10 +36,6 @@ namespace lr1
 
         private void xCount_ValueChanged(object sender, EventArgs e)
         {
-        }
-
-        private void button3_Click(object sender, EventArgs e)
-        {  
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -56,35 +48,55 @@ namespace lr1
                 {0, -25, -15}
             };
             double[] result = new double[2];
-            double[,] table_result;
-            SimplexMethod S = new SimplexMethod(table);
-            table_result = S.Calculate(result);
+            SimplexMethod s = new SimplexMethod(table);
+            s.Calculate(result);
+            printResults(result);
+        }
 
-            Console.WriteLine();
-            Console.WriteLine("Рішення: ");
-            Console.WriteLine("X[1] = " + result[0]);
-            Console.WriteLine("X[2] = " + result[1]);
-            Console.ReadLine();
+        private double[,] CreateFirstStFromInput()
+        {
+            int firstCTableRowsCount = _tempMainArr.GetLength(0) + 1;
+            int firstCTableColsCount = _tempMainArr.GetLength(1) + 1;
+            Console.WriteLine(firstCTableRowsCount + @" " + firstCTableColsCount);
+            double[,] firstCTable = new double[firstCTableRowsCount, firstCTableColsCount];
+            
+            for (int i = 0; i < firstCTableRowsCount - 1; i++)
+                firstCTable[i, 0] = _freeMembersValues[i];
+
+            firstCTable[firstCTableRowsCount-1, 0] = 0;
+
+            for (int i=0;i<firstCTableRowsCount-1;i++)
+                for (int j = 1; j < firstCTableColsCount; j++)
+                    firstCTable[i, j] = _tempMainArr[i, j-1];
+            for (int j = 1; j < firstCTableColsCount; j++)
+                    firstCTable[firstCTableRowsCount - 1, j] = -_goalCoeficientsArray[j-1];
+
+            for (int i = 0; i < firstCTable.GetLength(0); i++)
+            { for (int j = 0; j < firstCTable.GetLength(1); j++)
+                    Console.Write(firstCTable[i,j]+@" ");
+                Console.WriteLine();
+            }
+
+            return firstCTable;
+        }
+
+        private void printResults(double[] results)
+        {
+            Console.WriteLine(@"Рішення: ");
+            for (int i=0;i<results.Length;i++)
+                Console.Write(@"X"+(i+1).ToString()+@" = "+results[i] + Environment.NewLine);
         }
 
         private void button3_Click_1(object sender, EventArgs e)
         {
-            
-
-
-
-
-            
-              //TO DO read values of limitationCoeficents
-            int[,] tempMainArr = SimplexMethod.getValuesOfLimitationCoeficients();
-            int[,] tempAddArr = SimplexMethod.formAdditionalVarsArray(limitationsCount);
-            //int[] basis = 
-            int[,] AwithStartingBasicSoulutionLook = SimplexMethod.formMatrixOfCoefcients(tempMainArr,tempAddArr);
-            int[] freeMembersValues = SimplexMethod.getFreeMembersValues();
-            SimplexMethod.printExtendedSystemToFile(AwithStartingBasicSoulutionLook,freeMembersValues);
-            SimplexMethod.printCoeficientsMatrix(AwithStartingBasicSoulutionLook);
-            string[] basisArray = SimplexMethod.formBasis(AwithStartingBasicSoulutionLook);
-            SimplexMethod.printSimplexTable(basisArray);
-            }
+            _tempMainArr = SimplexMethod.GetValuesOfLimitationCoeficients();
+            _freeMembersValues = SimplexMethod.GetFreeMembersValues();
+            _goalCoeficientsArray = SimplexMethod.GetValuesOfGoalFuncCoeficients();
+            double[,] table =  CreateFirstStFromInput();
+            SimplexMethod s = new SimplexMethod(table);
+            double[] tableResult = new double[s.Table.GetLength(1)-1];
+            s.Calculate(tableResult);
+            printResults(tableResult);
+        }
     }
 }

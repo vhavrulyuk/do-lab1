@@ -21,6 +21,8 @@ namespace SimplexMethodNS
 
         private static TextBox[,] _data;
         private static TextBox[] _freeMembers;
+        private static TextBox[] _goal;
+
 
         public static void AddInterfaceElements(int limCount, int xCount, GroupBox limitationsGb)
         {
@@ -53,7 +55,7 @@ namespace SimplexMethodNS
                     labels[i, j] = new Label();
                     labels[i, j].Width = 20;
                     labels[i, j].Height = 32;
-                    labels[i, j].Text = "X" + (i + 1).ToString();
+                    labels[i, j].Text = "X" + (j + 1).ToString();
                     //labels[i,j].ForeColor = Color.Black;
                     labels[i, j].Location = new Point(_data[i, j].Location.X + 45, _data[i, j].Location.Y);
                     limitationsGb.Controls.Add(_data[i, j]);
@@ -65,19 +67,19 @@ namespace SimplexMethodNS
 
         private static void AddGoalFuncInputs(int xCount, GroupBox limitationsGb)
         {
-            TextBox[] goal = new TextBox[xCount];
+            _goal = new TextBox[xCount];
             int x = 20;
             int y = 50;
             int xOffset = 50;
             int i;
             for (i = 0; i < xCount; i++)
             {
-                goal[i] = new TextBox();
-                goal[i].Name = "textbox_input_goal_" + i.ToString();
-                goal[i].Width = 40;
-                goal[i].Height = 32;
-                goal[i].Location = new Point(i*xOffset + 10, y);
-                limitationsGb.Controls.Add(goal[i]);
+                _goal[i] = new TextBox();
+                _goal[i].Name = "textbox_input_goal_" + i.ToString();
+                _goal[i].Width = 40;
+                _goal[i].Height = 32;
+                _goal[i].Location = new Point(i*xOffset + 10, y);
+                limitationsGb.Controls.Add(_goal[i]);
             }
             Label goaLabel = new Label();
             goaLabel.Text = "-> MAX";
@@ -110,9 +112,9 @@ namespace SimplexMethodNS
             }
         }
 
-        public static int[,] FormAdditionalVarsArray(int limCount)
+        public static double[,] FormAdditionalVarsArray(int limCount)
         {
-            int[,] additionalVars = new int[limCount, limCount];
+            double[,] additionalVars = new double[limCount, limCount];
             for (int i = 0; i < limCount; i++)
             {
                 for (int j = 0; j < limCount; j++)
@@ -125,13 +127,13 @@ namespace SimplexMethodNS
             return additionalVars;
         }
 
-        public static int[,] FormMatrixOfCoefcients(int[,] mainV, int[,] additionalV)
+        public static double[,] FormMatrixOfCoefcients(double[,] mainV, double[,] additionalV)
         {
             int mainVRows = mainV.GetLength(0);
             int mainVCols = mainV.GetLength(1);
             int additionalRCols = additionalV.GetLength(1);
 
-            int[,] coeficientsMatrix = new int[mainVRows, mainVCols + additionalRCols];
+            double[,] coeficientsMatrix = new double[mainVRows, mainVCols + additionalRCols];
             for (int i = 0; i < mainVRows; i++)
                 for (int j = 0; j < mainVCols; j++)
                 {
@@ -152,22 +154,31 @@ namespace SimplexMethodNS
             return coeficientsMatrix;
         }
 
-        public static int[,] GetValuesOfLimitationCoeficients()
+        public static double[,] GetValuesOfLimitationCoeficients()
         {
             int dataRowsCount = _data.GetLength(0);
             int dataColCount = _data.GetLength(1);
-            int[,] limitationCoeficients = new int[dataRowsCount, dataColCount];
+            double[,] limitationCoeficients = new double[dataRowsCount, dataColCount];
             for (int i = 0; i < _data.GetLength(0); i++)
                 for (int j = 0; j < _data.GetLength(1); j++)
-                    Int32.TryParse(_data[i, j].Text, out limitationCoeficients[i, j]);
+                   Double.TryParse(_data[i, j].Text, out limitationCoeficients[i, j]);
             return limitationCoeficients;
         }
 
-        public static int[] GetFreeMembersValues()
+        public static double[] GetValuesOfGoalFuncCoeficients()
         {
-            int[] freeMemebersValues = new int[_freeMembers.Length];
+            int goalLength = _goal.Length;
+            double[] goalCoeficients = new double[goalLength];
+            for (int i = 0; i < goalLength; i++)
+                Double.TryParse(_goal[i].Text, out goalCoeficients[i]);
+            return goalCoeficients;
+        }
+
+        public static double[] GetFreeMembersValues()
+        {
+            double[] freeMemebersValues = new double[_freeMembers.Length];
             for (int i = 0; i < _freeMembers.Length; i++)
-                Int32.TryParse(_freeMembers[i].Text, out freeMemebersValues[i]);
+                Double.TryParse(_freeMembers[i].Text, out freeMemebersValues[i]);
             return freeMemebersValues;
         }
 
@@ -178,103 +189,48 @@ namespace SimplexMethodNS
             file.Close();
         }
 
-        public static void PrintExtendedSystemToFile(int[,] coeficients, int[] freeMembers)
-        {
-            // Compose a string that consists of three lines.
-            string lines = "Розширена система рівнянь: \r\n";
-            for (int i = 0; i < coeficients.GetLength(0); i++)
-            {
-                for (int j = 0; j < coeficients.GetLength(1); j++)
-                {
-                    lines += coeficients[i, j].ToString() + "X" + (j + 1).ToString();
-                    if (j < coeficients.GetLength(1) - 1) lines += "+";
-                }
-                lines += "=";
-                lines += freeMembers[i].ToString() + "\r\n";
-            }
-
-            // Write the string to a file.
-            //System.IO.StreamWriter file = new System.IO.StreamWriter("d:\\solution.txt", true);
-            //file.WriteLine(lines);
-            //file.Close();
-            WriteToFile(lines);
-        }
-
-        public static void PrintCoeficientsMatrix(int[,] cM)
-        {
-            string lines = "Матриця коефіцієнтів: \r\n";
-            for (int i = 0; i < cM.GetLength(0); i++)
-            {
-                for (int j = 0; j < cM.GetLength(1); j++)
-                {
-                    lines += cM[i, j] + " ";
-                }
-                lines += "\r\n";
-            }
-
-            WriteToFile(lines);
-        }
-
-        public static string[] FormBasis(int[,] cM)
-        {
-            int cMRowsCount = cM.GetLength(0);
-            int cMColsCount = cM.GetLength(1);
-            string[] basis = new string[cMColsCount];
-            int basisLength = basis.Length;
-            for (int i = 0; i < cMRowsCount; i++)
-            {
-                for (int j = cMColsCount - cMRowsCount; j < cMColsCount; j++)
-                {
-                    if (cM[i, j] != 0)
-                        basis[i] = "X" + (j + 1).ToString();
-                }
-            }
-            return basis;
-        }
-
-        public static void PrintSimplexTable(string[] basis)
-        {
-            string lines = "СТ\r\n";
-            char[] linesArray;
-            for (int i = 0; i < basis.Length; i++)
-            {
-                lines += basis[i] + "\r\n";
-            }
-            //Console.WriteLine(lines);
-            //linesArray = lines.ToCharArray();
-            //for (int i = 0; i < linesArray.Length; i++)
-            //    Console.WriteLine(linesArray[i]);
-            //lines = new string(linesArray);
-            //Console.WriteLine(lines);
-        }
-
         //source - Симплекс таблиця без базисих змінних
-        double[,] _table;
+        private double[,] table;
         int _m, _n;
         List<int> _basis; //список базисних змінних
         int _simplexTanleNumber = 1;
+
+        internal double[,] Table
+        {
+            get
+            {
+                return table;
+            }
+
+            set
+            {
+                table = value;
+            }
+        }
 
         public SimplexMethod(double[,] source)
         {
             _m = source.GetLength(0);
             _n = source.GetLength(1);
-            _table = new double[_m, _n + _m - 1];
+            Table = new double[_m, _n + _m - 1];
             _basis = new List<int>();
 
             for (int i = 0; i < _m; i++)
-                for (int j = 0; j < _table.GetLength(1); j++)
+            {
+                for (int j = 0; j < Table.GetLength(1); j++)
                 {
-                    if (j < _n) _table[i, j] = source[i, j];
-                    else _table[i, j] = 0;
-                    //Виставляємо коефіцієнт 1 перед базисною змінною
-                    if ((_n + i) < _table.GetLength(1))
+                    if (j < _n) Table[i, j] = source[i, j];
+                    else Table[i, j] = 0;
+                }
+            //Виставляємо коефіцієнт 1 перед базисною змінною
+                    if ((_n + i) < Table.GetLength(1))
                     {
-                        _table[i, _n + i] = 1;
-                        _basis.Add(_n + 1);
+                        Table[i, _n + i] = 1;
+                        _basis.Add(_n + i);
                     }
                 }
-            _n = _table.GetLength(1);
-        }
+            _n = Table.GetLength(1);
+           }
 
         public double[,] Calculate(double[] result)
         {
@@ -289,16 +245,16 @@ namespace SimplexMethodNS
                 double[,] newTable = new double[_m, _n];
 
                 for (int j = 0; j < _n; j++)
-                    newTable[mainRow, j] = _table[mainRow, j]/_table[mainRow, mainCol];
+                    newTable[mainRow, j] = Table[mainRow, j]/Table[mainRow, mainCol];
 
                 for (int i = 0; i < _m; i++)
                 {
                     if (i == mainRow)
                         continue;
                     for (int j = 0; j < _n; j++)
-                        newTable[i, j] = _table[i, j] - _table[i, mainCol]*newTable[mainRow, j];
+                        newTable[i, j] = Table[i, j] - Table[i, mainCol]*newTable[mainRow, j];
                 }
-                _table = newTable;
+                Table = newTable;
 
                 PrintSimplexTable(++_simplexTanleNumber);
                 
@@ -310,21 +266,22 @@ namespace SimplexMethodNS
             {
                 int k = _basis.IndexOf(i + 1);
                 if (k != -1)
-                    result[i] = _table[k, 0];
+                    result[i] = Table[k, 0];
                 else
                     result[i] = 0;
             }
-            return _table;
+
+            return Table;
             }
 
         private void PrintSimplexTable(int number)
             {
             Console.WriteLine("Симплекс таблиця №" + number.ToString());
-            for (int i = 0; i<_table.GetLength(0);i++)
-                    for (int j = 0; j<_table.GetLength(1); j++)
+            for (int i = 0; i<Table.GetLength(0);i++)
+                    for (int j = 0; j<Table.GetLength(1); j++)
                     {
-                        Console.Write(_table[i, j]+" ");
-                        if (j==_table.GetLength(1)-1) Console.WriteLine();
+                        Console.Write(Table[i, j]+" ");
+                        if (j==Table.GetLength(1)-1) Console.WriteLine();
                     }
             Console.WriteLine();
             }
@@ -335,7 +292,7 @@ namespace SimplexMethodNS
 
             for (int j = 1; j < _n; j++)
             {
-                if (_table[_m - 1, j] < 0)
+                if (Table[_m - 1, j] < 0)
                 {
                     flag = false;
                     break;
@@ -349,7 +306,7 @@ namespace SimplexMethodNS
             int mainCol = 1;
 
             for(int j=2;j<_n;j++)
-                if (_table[_m - 1, j] < _table[_m - 1, mainCol])
+                if (Table[_m - 1, j] < Table[_m - 1, mainCol])
                     mainCol = j;
 
             return mainCol;
@@ -360,13 +317,13 @@ namespace SimplexMethodNS
             int mainRow = 0;
 
             for (int i=0;i<_m-1;i++)
-                if (_table[i, mainCol] > 0)
+                if (Table[i, mainCol] > 0)
                 {
                     mainRow = i;
                     break;
                 }
             for (int i = mainRow + 1; i < _m - 1; i++)
-                if ((_table[i, mainCol] > 0) && ((_table[i, 0] / _table[i, mainCol]) < (_table[mainRow, 0] / _table[mainRow, mainCol])))
+                if ((Table[i, mainCol] > 0) && ((Table[i, 0] / Table[i, mainCol]) < (Table[mainRow, 0] / Table[mainRow, mainCol])))
                     mainRow = i;
 
             return mainRow;
