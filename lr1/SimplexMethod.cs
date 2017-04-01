@@ -281,13 +281,28 @@ namespace SimplexMethodNS
 
         void checkWhetheOptimalPlanExists(double[,] simplexTable)
         {
-            int coeficientsCount = simplexTable.Length - simplexTable.GetLength(0);
+            int aWidth = simplexTable.GetLength(1);
+            int aRowsCount = simplexTable.GetLength(0);
+            //int coeficientsCount = simplexTable.Length - simplexTable.GetLength(0);
             int negativeCoeficientsCount = 0;
-            for (int i=0;i<simplexTable.GetLength(0);i++)
-                for (int j =1;j<simplexTable.GetLength(1);j++)
-                    if (simplexTable[i, j] < 0) negativeCoeficientsCount++;
-            if (coeficientsCount == negativeCoeficientsCount)
-            Console.WriteLine("Функція мети еобмежено зростає. Кінець. Задачу некоректно сформульовано.");
+            //for (int i=0;i<simplexTable.GetLength(0);i++)
+            //    for (int j =1;j<simplexTable.GetLength(1);j++)
+            //        if (simplexTable[i, j] < 0) negativeCoeficientsCount++;
+            //if (coeficientsCount == negativeCoeficientsCount)
+
+            for (int j =1;j<aWidth;j++)
+                if (simplexTable[aRowsCount - 1, j] < 0)
+                {
+                    for (int i = 0; i < aRowsCount-1; i++)
+                    {
+                        if (simplexTable[i, j] <= 0)
+                        {
+                            negativeCoeficientsCount++;
+                        }
+                    }
+                    if (negativeCoeficientsCount == aRowsCount-1)
+                        Console.WriteLine("Функція мети необмежено зростає. Кінець. Задачу некоректно сформульовано.");
+                }
         }
 
         private void PrintSimplexTable(int number, bool stepByStep)
@@ -299,7 +314,6 @@ namespace SimplexMethodNS
                         Console.Write(Table[i, j]+" ");
                     //if (stepByStep) Console.ReadLine();
                     if (j==Table.GetLength(1)-1) Console.WriteLine();
-                        
                     }
             Console.WriteLine();
             }
