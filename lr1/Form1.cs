@@ -48,7 +48,7 @@ namespace lr1
             };
             double[] result = new double[2];
             SimplexMethod s = new SimplexMethod(table);
-            s.Calculate(result);
+            s.Calculate(result, false);
             printResults(result);
         }
 
@@ -70,11 +70,11 @@ namespace lr1
             for (int j = 1; j < firstCTableColsCount; j++)
                     firstCTable[firstCTableRowsCount - 1, j] = -_goalCoeficientsArray[j-1];
 
-            for (int i = 0; i < firstCTable.GetLength(0); i++)
-            { for (int j = 0; j < firstCTable.GetLength(1); j++)
-                    Console.Write(firstCTable[i,j]+@" ");
-                Console.WriteLine();
-            }
+            //for (int i = 0; i < firstCTable.GetLength(0); i++)
+            //{ for (int j = 0; j < firstCTable.GetLength(1); j++)
+            //        Console.Write(firstCTable[i,j]+@" ");
+            //    Console.WriteLine();
+            //}
 
             return firstCTable;
         }
@@ -86,6 +86,11 @@ namespace lr1
                 Console.Write(@"X"+(i+1).ToString()+@" = "+results[i] + Environment.NewLine);
         }
 
+        private void checkBox1_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
+
         private void button3_Click_1(object sender, EventArgs e)
         {
             _tempMainArr = SimplexMethod.GetValuesOfLimitationCoeficients();
@@ -94,7 +99,7 @@ namespace lr1
             double[,] table =  CreateFirstStFromInput();
             SimplexMethod s = new SimplexMethod(table);
             double[] tableResult = new double[s.Table.GetLength(1)-1];
-            s.Calculate(tableResult);
+            s.Calculate(tableResult, stepByStep.Checked);
             printResults(tableResult);
         }
     }

@@ -38,6 +38,7 @@
             this.limitationsGB = new System.Windows.Forms.GroupBox();
             this.label3 = new System.Windows.Forms.Label();
             this.button3 = new System.Windows.Forms.Button();
+            this.stepByStep = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.xCount)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.lCount)).BeginInit();
             this.groupBox1.SuspendLayout();
@@ -171,11 +172,23 @@
             this.button3.UseVisualStyleBackColor = true;
             this.button3.Click += new System.EventHandler(this.button3_Click_1);
             // 
+            // stepByStep
+            // 
+            this.stepByStep.AutoSize = true;
+            this.stepByStep.Location = new System.Drawing.Point(12, 145);
+            this.stepByStep.Name = "stepByStep";
+            this.stepByStep.Size = new System.Drawing.Size(158, 17);
+            this.stepByStep.TabIndex = 9;
+            this.stepByStep.Text = "Покрокове відображення.";
+            this.stepByStep.UseVisualStyleBackColor = true;
+            this.stepByStep.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(798, 432);
+            this.Controls.Add(this.stepByStep);
             this.Controls.Add(this.button3);
             this.Controls.Add(this.limitationsGB);
             this.Controls.Add(this.groupBox1);
@@ -190,6 +203,7 @@
             this.limitationsGB.ResumeLayout(false);
             this.limitationsGB.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -205,6 +219,7 @@
         private System.Windows.Forms.Label label3;
         public System.Windows.Forms.GroupBox limitationsGB;
         private System.Windows.Forms.Button button3;
+        private System.Windows.Forms.CheckBox stepByStep;
     }
 }
 

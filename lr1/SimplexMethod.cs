@@ -38,8 +38,6 @@ namespace SimplexMethodNS
             limitationsGb.Controls.Add(mainVarLabel);
             _data = new TextBox[limCount, xCount];
             Label[,] labels = new Label[limCount, xCount];
-            int x = 50;
-            int y = 50;
             int xOffset = 70;
             int yOffset = 50;
             int j = 0;
@@ -232,10 +230,10 @@ namespace SimplexMethodNS
             _n = Table.GetLength(1);
            }
 
-        public double[,] Calculate(double[] result)
+        public double[,] Calculate(double[] result, bool stepByStep)
         {
             int mainCol, mainRow; //Провідні стовпчик та рядок
-            PrintSimplexTable(_simplexTanleNumber);
+            PrintSimplexTable(_simplexTanleNumber, stepByStep);
             while (!IsItEnd())
             {
                 mainCol = FindMainCol();
@@ -245,21 +243,28 @@ namespace SimplexMethodNS
                 double[,] newTable = new double[_m, _n];
 
                 for (int j = 0; j < _n; j++)
+                {
                     newTable[mainRow, j] = Table[mainRow, j]/Table[mainRow, mainCol];
-
+                    //if (stepByStep) Console.WriteLine(newTable[mainRow,j]);
+                }
+                
                 for (int i = 0; i < _m; i++)
                 {
                     if (i == mainRow)
                         continue;
                     for (int j = 0; j < _n; j++)
+                    {
                         newTable[i, j] = Table[i, j] - Table[i, mainCol]*newTable[mainRow, j];
+                        //if (stepByStep) Console.WriteLine(newTable[i, j]);
+                    }
+
                 }
+
                 Table = newTable;
 
-                PrintSimplexTable(++_simplexTanleNumber);
-                
-
-            }
+                checkWhetheOptimalPlanExists(Table);
+                PrintSimplexTable(++_simplexTanleNumber, stepByStep);
+                }
 
             //Заносимо в result знайдені значення x
             for (int i = 0; i < result.Length; i++)
@@ -274,14 +279,27 @@ namespace SimplexMethodNS
             return Table;
             }
 
-        private void PrintSimplexTable(int number)
+        void checkWhetheOptimalPlanExists(double[,] simplexTable)
+        {
+            int coeficientsCount = simplexTable.Length - simplexTable.GetLength(0);
+            int negativeCoeficientsCount = 0;
+            for (int i=0;i<simplexTable.GetLength(0);i++)
+                for (int j =1;j<simplexTable.GetLength(1);j++)
+                    if (simplexTable[i, j] < 0) negativeCoeficientsCount++;
+            if (coeficientsCount == negativeCoeficientsCount)
+            Console.WriteLine("Функція мети еобмежено зростає. Кінець. Задачу некоректно сформульовано.");
+        }
+
+        private void PrintSimplexTable(int number, bool stepByStep)
             {
             Console.WriteLine("Симплекс таблиця №" + number.ToString());
             for (int i = 0; i<Table.GetLength(0);i++)
                     for (int j = 0; j<Table.GetLength(1); j++)
                     {
                         Console.Write(Table[i, j]+" ");
-                        if (j==Table.GetLength(1)-1) Console.WriteLine();
+                    //if (stepByStep) Console.ReadLine();
+                    if (j==Table.GetLength(1)-1) Console.WriteLine();
+                        
                     }
             Console.WriteLine();
             }
